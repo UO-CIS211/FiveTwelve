@@ -594,7 +594,7 @@ empty spot.  Let's add that to our ```TestBoardConstructor``` class in ```test_m
         """A newly constructed Board should always have at least
         one empty space.
         """
-        board = model.Board()
+        board = Board()
         self.assertTrue(board.has_empty())
 ```
 
@@ -806,14 +806,14 @@ class TestScaffolding(unittest.TestCase):
 
     def test_to_from_list(self):
         """to_list and from_list should be inverse"""
-        board = model.Board()
+        board = Board()
         as_list = [[0, 2, 2, 4], [2, 0, 2, 8], [8, 2, 2, 4], [4, 2, 2, 0]]
         board.from_list(as_list)
         self.assertEqual(board.to_list(), as_list)
 
     def test_from_to(self):
         """to_list and from_list should be inverse"""
-        board = model.Board()
+        board = Board()
         board.place_tile()
         board.place_tile(value=32)
         board.place_tile()
@@ -888,7 +888,7 @@ write test cases to check it.
 class TestBoundsCheck(unittest.TestCase):
 
     def test_bounds_default_shape(self):
-        board = model.Board()
+        board = Board()
         self.assertTrue(board.in_bounds(Vec(0,0)))
         self.assertTrue(board.in_bounds(Vec(3,3)))
         self.assertTrue(board.in_bounds(Vec(1,2)))
@@ -902,7 +902,7 @@ class TestBoundsCheck(unittest.TestCase):
         """Non-square board to make sure we're using row and column
         correctly.
         """
-        board = model.Board(rows=2,cols=4)
+        board = Board(rows=2,cols=4)
         self.assertTrue(board.in_bounds(Vec(0,0)))
         self.assertTrue(board.in_bounds(Vec(1,3)))
         self.assertFalse(board.in_bounds(Vec(3,1)))
@@ -1071,7 +1071,7 @@ class TestSlide(unittest.TestCase):
 
     def test_slide_left_to_edge(self):
         """A tile should stop just when it reaches the edge"""
-        board = model.Board()
+        board = Board()
         board.from_list([[0, 0, 0, 0],
                          [0, 0, 2, 0],
                          [0, 0, 0, 0],
@@ -1085,7 +1085,7 @@ class TestSlide(unittest.TestCase):
 
     def test_slide_right_to_edge(self):
         """A tile should stop just when it reaches the edge"""
-        board = model.Board()
+        board = Board()
         board.from_list([[0, 0, 0, 0],
                          [0, 0, 2, 0],
                          [0, 0, 0, 0],
@@ -1099,7 +1099,7 @@ class TestSlide(unittest.TestCase):
 
     def test_slide_already_at_edge(self):
         """A tile already at the edge can't slide farther that way"""
-        board = model.Board()
+        board = Board()
         board.from_list([[0, 0, 0, 0],
                          [0, 0, 0, 4],
                          [0, 0, 0, 0],
@@ -1113,7 +1113,7 @@ class TestSlide(unittest.TestCase):
 
     def test_empty_wont_slide(self):
         """Sliding an empty position has no effect"""
-        board = model.Board()
+        board = Board()
         board.from_list([[2, 0, 0, 0],
                          [0, 2, 0, 0],
                          [0, 0, 2, 0],
@@ -1127,7 +1127,7 @@ class TestSlide(unittest.TestCase):
 
     def test_slide_into_obstacle(self):
         """A tile should stop when it reaches another tile"""
-        board = model.Board()
+        board = Board()
         board.from_list([[2, 0, 0, 0],
                          [0, 2, 4, 0],
                          [0, 0, 2, 0],
@@ -1148,7 +1148,7 @@ Let's try that with tile merging:
 ```python
     def test_slide_merge(self):
         """Equal tiles merge when they meet"""
-        board = model.Board()
+        board = Board()
         board.from_list([[2, 0, 0, 0],
                          [0, 2, 2, 4],
                          [0, 0, 2, 0],
@@ -1315,7 +1315,7 @@ out, but it isn't easy.  Time for more scaffolding!
 I added the following function to ```test_model.py```:
 
 ```python
-def board_diff(actual: model.Board, expected: model.Board):
+def board_diff(actual: Board, expected: Board):
     """Print actual and expected board side-by-side."""
     print(f"\nActual\t\t\tExpected", file=sys.stderr)
     for row in range(len(expected)):
@@ -1327,7 +1327,7 @@ Then I expanded out the failing test to add this better diagnosis:
 
 ```python
     def test_move_merge_up(self):
-        board = model.Board()
+        board = Board()
         board.from_list([[4, 0, 2, 2],
                          [2, 0, 2, 2],
                          [2, 2, 4, 0],
@@ -1356,7 +1356,7 @@ class TestMove(unittest.TestCase):
 
     def test_move_all_right(self):
         """Simple slide with no merges"""
-        board = model.Board()
+        board = Board()
         board.from_list([[2, 0, 0, 0],
                           [0, 2, 0, 0],
                           [0, 0, 2, 0],
@@ -1370,7 +1370,7 @@ class TestMove(unittest.TestCase):
 
     def test_move_all_left(self):
         """Simple slide with no merges"""
-        board = model.Board()
+        board = Board()
         board.from_list([[2, 0, 0, 0],
                           [0, 2, 0, 0],
                           [0, 0, 2, 0],
@@ -1384,7 +1384,7 @@ class TestMove(unittest.TestCase):
 
     def test_move_all_up(self):
         """Simple slide with no merges"""
-        board = model.Board()
+        board = Board()
         board.from_list([[2, 0, 0, 0],
                          [0, 2, 0, 0],
                          [0, 0, 2, 0],
@@ -1397,7 +1397,7 @@ class TestMove(unittest.TestCase):
                            [0, 0, 0, 0]])
 
     def test_move_merge_right(self):
-        board = model.Board()
+        board = Board()
         board.from_list([[2, 0, 2, 0],
                          [2, 2, 2, 0],
                          [2, 2, 0, 0],
@@ -1410,7 +1410,7 @@ class TestMove(unittest.TestCase):
                            [0, 0, 4, 4]]) # Tile stops sliding when it merges
 
     def test_move_merge_up(self):
-        board = model.Board()
+        board = Board()
         board.from_list([[4, 0, 2, 2],
                          [2, 0, 2, 2],
                          [2, 2, 4, 0],
